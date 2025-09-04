@@ -1,0 +1,1 @@
+web: sh setu.sh && streamlit run app.py
