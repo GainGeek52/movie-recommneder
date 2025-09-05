@@ -10,30 +10,30 @@ st.markdown(
     """
     <style>
     body {
-        background: linear-gradient(120deg, #232526 0%, #414345 100%);
+        background: linear-gradient(120deg, #ff0000 0%, #ff4b2b 100%);
         color: #fff;
     }
     .stApp {
-        background: linear-gradient(120deg, #232526 0%, #414345 100%);
+        background: linear-gradient(120deg, #ff0000 0%, #ff4b2b 100%);
     }
     .stButton > button {
-        background-color: #ff4b2b;
-        color: white;
+        background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+        color: #fff;
         border: none;
         border-radius: 8px;
         padding: 0.5em 2em;
         font-size: 1.1em;
         font-weight: bold;
         transition: 0.3s;
-        box-shadow: 0 4px 14px 0 rgba(255,75,43,0.15);
+        box-shadow: 0 4px 14px 0 rgba(30,60,114,0.15);
     }
     .stButton > button:hover {
-        background-color: #ff416c;
+        background: linear-gradient(90deg, #396afc 0%, #2948ff 100%);
         color: #fff;
         transform: scale(1.05);
     }
     .stSelectbox > div > div {
-        background: #232526;
+        background: #ff0000;
         color: #fff;
     }
     .stSlider > div {
