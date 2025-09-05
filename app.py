@@ -5,39 +5,148 @@ import requests
 import os
 import gdown
 
-# --- Custom CSS for background and button styling ---
+# --- Custom CSS for cinematic aesthetic ---
 st.markdown(
     """
     <style>
-    body {
-        background: linear-gradient(120deg, #ff0000 0%, #ff4b2b 100%);
-        color: #fff;
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+    
+    * {
+        font-family: 'Montserrat', sans-serif;
     }
+    
+    .main {
+        background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
+    }
+    
     .stApp {
-        background: linear-gradient(120deg, #ff0000 0%, #ff4b2b 100%);
+        background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
+        color: #FFFFFF;
     }
+    
     .stButton > button {
-        background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
-        color: #fff;
+        background: linear-gradient(90deg, #FF416C 0%, #FF4B2B 100%);
+        color: white;
         border: none;
-        border-radius: 8px;
-        padding: 0.5em 2em;
-        font-size: 1.1em;
-        font-weight: bold;
-        transition: 0.3s;
-        box-shadow: 0 4px 14px 0 rgba(30,60,114,0.15);
+        border-radius: 25px;
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px 0 rgba(229, 66, 10, 0.3);
+        width: 100%;
     }
+    
     .stButton > button:hover {
-        background: linear-gradient(90deg, #396afc 0%, #2948ff 100%);
-        color: #fff;
+        background: linear-gradient(90deg, #FF4B2B 0%, #FF416C 100%);
         transform: scale(1.05);
+        box-shadow: 0 6px 20px 0 rgba(229, 66, 10, 0.5);
     }
+    
     .stSelectbox > div > div {
-        background: #ff0000;
-        color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
-    .stSlider > div {
-        color: #fff;
+    
+    .stSelectbox label {
+        color: white;
+        font-weight: 600;
+    }
+    
+    .stSlider > div > div > div {
+        background: linear-gradient(90deg, #FF416C 0%, #FF4B2B 100%);
+    }
+    
+    .stSlider > div > div > div > div {
+        background: white;
+    }
+    
+    .stSlider label {
+        color: white;
+        font-weight: 600;
+    }
+    
+    .movie-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        height: 100%;
+    }
+    
+    .movie-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 20px 0 rgba(0, 0, 0, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+    }
+    
+    .movie-title {
+        font-weight: 700;
+        font-size: 1rem;
+        margin-top: 0.8rem;
+        color: white;
+        text-align: center;
+        height: 2.8rem;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    
+    .header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+    
+    .header h1 {
+        font-weight: 700;
+        font-size: 2.8rem;
+        background: linear-gradient(90deg, #FF416C 0%, #FF4B2B 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+    }
+    
+    .header p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+        margin-top: 0;
+    }
+    
+    .recommendation-section {
+        margin-top: 2rem;
+    }
+    
+    .recommendation-header {
+        font-weight: 600;
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+        color: white;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.8rem;
+        border-radius: 10px;
+    }
+    
+    div[data-testid="stHorizontalBlock"] {
+        align-items: stretch;
+    }
+    
+    /* Custom placeholder for missing posters */
+    .placeholder-poster {
+        background: linear-gradient(135deg, #2C5364 0%, #203A43 100%);
+        border-radius: 10px;
+        height: 270px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 600;
     }
     </style>
     """,
@@ -82,21 +191,31 @@ def recommend(movie, num_recommendations=5):
     return recommended_movies
 
 # 🔹 Streamlit UI
-st.title("🎬 Movie Recommender System")
-st.write("Find movies similar to your favorite one!")
+st.markdown('<div class="header"><h1>🎬 CineMatch</h1><p>Discover your next favorite movie</p></div>', unsafe_allow_html=True)
 
-selected_movie_name = st.selectbox("🎥 Select a Movie", movies['title'].values)
+selected_movie_name = st.selectbox("🎥 Select a movie you enjoy", movies['title'].values)
 
 # Let user choose number of recommendations
-num_recs = st.slider("📌 How many recommendations do you want?", min_value=1, max_value=10, value=5)
+num_recs = st.slider("📌 Number of recommendations", min_value=1, max_value=10, value=5)
 
-if st.button("Recommend Movies"):
-    recommendations = recommend(selected_movie_name, num_recs)
-
-    # Display in 3-column layout
-    cols = st.columns(3)
-    for idx, movie in enumerate(recommendations):
-        poster = fetch_poster(movie)
-        with cols[idx % 3]:
-            st.image(poster if poster else "https://via.placeholder.com/200x300?text=No+Poster", width=180)
-            st.markdown(f"**{movie}**")
+if st.button("Find Similar Movies"):
+    with st.spinner('Searching for the perfect recommendations...'):
+        recommendations = recommend(selected_movie_name, num_recs)
+        
+        st.markdown('<div class="recommendation-section">', unsafe_allow_html=True)
+        st.markdown(f'<div class="recommendation-header">Movies similar to "{selected_movie_name}"</div>', unsafe_allow_html=True)
+        
+        # Display in responsive columns
+        cols = st.columns(3)
+        for idx, movie in enumerate(recommendations):
+            poster = fetch_poster(movie)
+            with cols[idx % 3]:
+                st.markdown('<div class="movie-card">', unsafe_allow_html=True)
+                if poster:
+                    st.image(poster, use_column_width=True)
+                else:
+                    st.markdown(f'<div class="placeholder-poster">🎬 {movie[:15]}...</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="movie-title">{movie}</div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
