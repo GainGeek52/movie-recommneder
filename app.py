@@ -212,7 +212,7 @@ if st.button("Find Similar Movies"):
             with cols[idx % 3]:
                 st.markdown('<div class="movie-card">', unsafe_allow_html=True)
                 if poster:
-                    st.image(poster, use_column_width=True)
+                    st.image(poster, use_container_width=True)  # Updated parameter
                 else:
                     st.markdown(f'<div class="placeholder-poster">🎬 {movie[:15]}...</div>', unsafe_allow_html=True)
                 st.markdown(f'<div class="movie-title">{movie}</div>', unsafe_allow_html=True)
