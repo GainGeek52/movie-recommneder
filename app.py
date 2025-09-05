@@ -2,6 +2,23 @@ import streamlit as st
 import pickle
 import pandas as pd
 import requests
+import os
+import gdown
+
+# 🔹 Helper: download file if missing
+def download_file(file_id, output):
+    if not os.path.exists(output):
+        with st.spinner(f"Downloading {output} ..."):
+            gdown.download(f"https://drive.google.com/uc?id={file_id}", output, quiet=False)
+
+# 🔹 Download required files
+download_file("1O0SheM_jLssJSRJFWp1O0pdTes7svgGA", "similarity.pkl")  # <-- your similarity.pkl file
+download_file("YOUR_MOVIE_DICT_FILE_ID", "movie_dict.pkl")            # <-- add movie_dict.pkl file ID here
+
+# 🔹 Load data
+movies_dict = pickle.load(open('movie_dict.pkl', 'rb'))
+movies = pd.DataFrame(movies_dict)
+similarity = pickle.load(open('similarity.pkl', 'rb'))
 
 # 🔹 Fetch poster from OMDb
 def fetch_poster(movie_title):
@@ -24,11 +41,6 @@ def recommend(movie, num_recommendations=5):
     for i in movies_list:
         recommended_movies.append(movies.iloc[i[0]].title)
     return recommended_movies
-
-# 🔹 Load data
-movies_dict = pickle.load(open('movie_dict.pkl', 'rb'))
-movies = pd.DataFrame(movies_dict)
-similarity = pickle.load(open('similarity.pkl', 'rb'))
 
 # 🔹 Streamlit UI
 st.title("🎬 Movie Recommender System")
