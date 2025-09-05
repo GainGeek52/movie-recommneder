@@ -5,6 +5,45 @@ import requests
 import os
 import gdown
 
+# --- Custom CSS for background and button styling ---
+st.markdown(
+    """
+    <style>
+    body {
+        background: linear-gradient(120deg, #232526 0%, #414345 100%);
+        color: #fff;
+    }
+    .stApp {
+        background: linear-gradient(120deg, #232526 0%, #414345 100%);
+    }
+    .stButton > button {
+        background-color: #ff4b2b;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5em 2em;
+        font-size: 1.1em;
+        font-weight: bold;
+        transition: 0.3s;
+        box-shadow: 0 4px 14px 0 rgba(255,75,43,0.15);
+    }
+    .stButton > button:hover {
+        background-color: #ff416c;
+        color: #fff;
+        transform: scale(1.05);
+    }
+    .stSelectbox > div > div {
+        background: #232526;
+        color: #fff;
+    }
+    .stSlider > div {
+        color: #fff;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # 🔹 Helper: download file if missing
 def download_file(file_id, output):
     if not os.path.exists(output):
